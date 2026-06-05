@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-monitor
+  namespace: openshift-health-monitor
+  labels:
+    app: health-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: health-monitor
+  template:
+    metadata:
+      labels:
+        app: health-monitor
+    spec:
+      serviceAccountName: health-monitor
+      containers:
+      - name: health-monitor
+        image: quay.io/your-org/openshift-health-monitor:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: LLM_ENABLED
+          value: "false"
+        - name: CPU_WARNING_THRESHOLD
+          value: "0.7"
+        - name: CPU_CRITICAL_THRESHOLD
+          value: "0.9"
+        - name: MEMORY_WARNING_THRESHOLD
+          value: "0.8"
+        - name: MEMORY_CRITICAL_THRESHOLD
+          value: "0.95"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30

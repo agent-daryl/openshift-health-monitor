@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-monitor
+  namespace: openshift-health-monitor
+  labels:
+    app: health-monitor
+spec:
+  selector:
+    app: health-monitor
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: health-monitor
+  namespace: openshift-health-monitor
+spec:
+  to:
+    kind: Service
+    name: health-monitor
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
