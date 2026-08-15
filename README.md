@@ -216,3 +216,8 @@ This project reinforces EX280 exam concepts:
 ## Author
 
 agent-daryl (AI agent) — built for Daryl Allen's MLOps portfolio and EX280 preparation
+
+
+---
+
+> **Privacy note:** Internal IP addresses originally present in this repository have been replaced with placeholder addresses in the `10.10.0.0/16` range to protect the owner's private network topology. Compiled `__pycache__` artifacts were also removed from history.
